@@ -1,0 +1,5 @@
+black
+requests
+httpx
+pytest
+pytest-asyncio

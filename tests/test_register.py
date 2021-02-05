@@ -17,16 +17,22 @@ engine = create_engine(settings.sqlalchemy_database_uri)
 client = TestClient(app)
 
 
-class TestRegister(IsolatedAsyncioTestCase):
+class TestRegister:
     def setup_class(self):
+        metadata.create_all(engine)
+
+    def setup(self):
         metadata.create_all(engine)
 
     def teardown_class(self):
         metadata.drop_all(engine)
 
+    def teardown(self):
+        metadata.drop_all(engine)
+
     @pytest.mark.asyncio
     async def test_successful_register_saves_expiry_to_seven_days(self):
-        async with AsyncClient(app=app, base_url="http://127.0.0.1") as ac:
+        async with AsyncClient(app=app, base_url="http://testserver") as ac:
             response = await ac.post(
                 "/register/",
                 headers={"api-token": "abc123", "email": "h@h.de", "password": "pass1"},
@@ -44,7 +50,7 @@ class TestRegister(IsolatedAsyncioTestCase):
 
     @pytest.mark.asyncio
     async def test_successful_register_saves_device_type(self):
-        async with AsyncClient(app=app, base_url="http://127.0.0.1") as ac:
+        async with AsyncClient(app=app, base_url="http://testserver") as ac:
             response = await ac.post(
                 "/register/",
                 headers={"api-token": "abc123", "email": "h@h.de", "password": "pass1"},

@@ -14,18 +14,11 @@ from models.model import device
 
 settings = Settings()
 engine = create_engine(settings.sqlalchemy_database_uri)
-client = TestClient(app)
 
 
 class TestRegister:
-    def setup_class(self):
-        metadata.create_all(engine)
-
     def setup(self):
         metadata.create_all(engine)
-
-    def teardown_class(self):
-        metadata.drop_all(engine)
 
     def teardown(self):
         metadata.drop_all(engine)
